@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Marker {
+            constructor(inkLevel) {
+                this.inkLevel = inkLevel;
+            }
+            textColor;
+            print(text, initialColor) {
+                let printedText = '';
+                let colorIntensity = 100; 
+                this.textColor = initialColor;
+
+                for (let i = 0; i < text.length; i++) {
+                    if (text[i] !== ' ' && this.inkLevel >= 0.5) {
+                        colorIntensity = Math.max(10, colorIntensity - 5);
+                        let dynamicColor = `rgba(255, 0, 0, ${colorIntensity / 100})`;
+                        printedText += `<span style="color: ${dynamicColor}">${text[i]}</span>`;
+                        this.inkLevel -= 0.5;
+                    } else if (text[i] === ' ') {
+                        printedText += ' ';
+                    } else {
+                        break;
+                    }
+                }
+                document.write(`Printed text in ${this.textColor}: ${printedText}<br>`);
+                document.write(`Ink level remaining: ${this.inkLevel.toFixed(2)}%<br>`);
+            }
+        }
+
+        class RefillableMarker extends Marker {
+            constructor(inkLevel, maxInkCapacity) {
+                super(inkLevel);
+                this.maxInkCapacity = maxInkCapacity;
+            }
+            refill() {
+                const inkToAdd = this.maxInkCapacity - this.inkLevel;
+                this.inkLevel = this.maxInkCapacity;
+                document.write(`Refilled marker with ${inkToAdd.toFixed(2)}% ink<br>`);
+                document.write(`Ink level now: ${this.inkLevel.toFixed(2)}%<br>`);
+            }
+        }
+
+        let myMarker = new RefillableMarker(30, 100);
+        myMarker.print('Hello, World! This is a marker', 'pink');
+        myMarker.refill();
+        myMarker.print('אני לומדת מחשבים באוניברסיתה כבר שנה שניה בה', 'pink');
+        myMarker.refill();
+    </script>
+</body>
+
+</html>
